@@ -9,13 +9,9 @@ HBN.EventFrame = Frame
 -------------------------------------------------------
 
 Frame:RegisterEvent("PLAYER_LOGIN")
-
 Frame:RegisterEvent("GROUP_ROSTER_UPDATE")
-
 Frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-
 Frame:RegisterEvent("PLAYER_REGEN_ENABLED")
-
 Frame:RegisterEvent("READY_CHECK")
 
 -------------------------------------------------------
@@ -23,32 +19,35 @@ Frame:RegisterEvent("READY_CHECK")
 Frame:SetScript("OnEvent", function(_, event, ...)
 
     if HBN[event] then
-
         HBN[event](HBN, ...)
-
     end
 
 end)
 
 -------------------------------------------------------
+-- PLAYER_LOGIN
+-------------------------------------------------------
 
 function HBN:PLAYER_LOGIN()
 
-    if not HBNRaidAssistantDB then
-
-        HBNRaidAssistantDB = {}
-
-    end
+    HBNRaidAssistantDB = HBNRaidAssistantDB or {}
 
     self.DB = HBNRaidAssistantDB
-	HBN.Priority:Build()	
+
+    HBN.Priority:Build()
+
+    ---------------------------------------------------
+    -- Load Assignments
+    ---------------------------------------------------
+
+    HBN.Assignments:Load()
 
     self:Debug("Loaded")
 
 end
 
 -------------------------------------------------------
-
+-- GROUP_ROSTER_UPDATE
 -------------------------------------------------------
 
 function HBN:GROUP_ROSTER_UPDATE()
@@ -56,29 +55,38 @@ function HBN:GROUP_ROSTER_UPDATE()
     self:Debug("Raid Updated")
 
     ---------------------------------------------------
-    -- Assignment Engine
+    -- Raid
     ---------------------------------------------------
 
-	HBN.Raid:Scan()
+    HBN.Raid:Scan()
 
     ---------------------------------------------------
-    -- Assignments
+    -- Debug
     ---------------------------------------------------
 
-	HBN.Assignments:Initialize()
+    HBN.Assignments:Print()
 
-	HBN.Assignments:Print()
+    ---------------------------------------------------
+    -- Refresh UI
+    ---------------------------------------------------
+
+    if HBN.UI and HBN.UI.Frame then
+        HBN.UI:Refresh()
+    end
 
     ---------------------------------------------------
     -- Buff Scanner
     ---------------------------------------------------
 
-	HBN.BuffScanner:Scan()
-
-	HBN.BuffScanner:Print()
+    if HBN.BuffScanner then
+        HBN.BuffScanner:Scan()
+        HBN.BuffScanner:Print()
+    end
 
 end
 
+-------------------------------------------------------
+-- PLAYER_REGEN_ENABLED
 -------------------------------------------------------
 
 function HBN:PLAYER_REGEN_ENABLED()
@@ -87,6 +95,8 @@ function HBN:PLAYER_REGEN_ENABLED()
 
 end
 
+-------------------------------------------------------
+-- READY_CHECK
 -------------------------------------------------------
 
 function HBN:READY_CHECK()
