@@ -68,68 +68,57 @@ function HBN.Popup:Create()
 
     frame.Title = title
 
-    ---------------------------------------------------
-    -- Spieler erzeugen
-    ---------------------------------------------------
+end
 
-    local buff = HBN.Buffs[cell.buff]
-    local class = buff.class
-    local players = HBN.Raid:GetSortedClass(class)
+-------------------------------------------------------
+-- Hide
+-------------------------------------------------------
 
-    for i,player in ipairs(players) do
+function HBN.Popup:Hide()
 
-        local button = CreateFrame(
-            "Button",
-            nil,
-            frame,
-            "UIPanelButtonTemplate"
-        )
-
-        button:SetSize(140,20)
-        button:SetPoint("TOP",0,-30-((i-1)*22))
-        button:SetText(player.name)
-
-        button:SetScript("OnClick",function()
-
-            HBN.Assignments:Set(
-                cell.buff,
-                cell.class,
-                player.name
-            )
-
-            HBN.UI:Refresh()
-            frame:Hide()
-
-        end)
-
+    if self.Frame then
+        self.Frame:Hide()
     end
 
-    ---------------------------------------------------
-    -- Keine Zuweisung
-    ---------------------------------------------------
+end
 
-    local clear = CreateFrame(
-        "Button",
-        nil,
-        frame,
-        "UIPanelButtonTemplate"
+-------------------------------------------------------
+-- Show
+-------------------------------------------------------
+
+function HBN.Popup:Show(cell)
+
+    if not self.Frame then
+        self:Create()
+    end
+
+    self.CurrentCell = cell
+
+    local frame = self.Frame
+
+    frame:ClearAllPoints()
+
+    frame:SetPoint(
+
+        "TOPLEFT",
+
+        cell,
+
+        "BOTTOMLEFT",
+
+        0,
+
+        -2
+
     )
 
-    clear:SetSize(140,20)
-    clear:SetPoint("BOTTOM",0,10)
-    clear:SetText("Keine Zuweisung")
+    frame.Title:SetText(
 
-    clear:SetScript("OnClick",function()
+        HBN.Buffs[cell.buff].display
 
-        HBN.Assignments:Set(
-            cell.buff,
-            cell.class,
-            nil
-        )
+    )
 
-        HBN.UI:Refresh()
-        frame:Hide()
-
-    end)
+    frame:Show()
 
 end
+
