@@ -1,0 +1,23 @@
+## Interface: 20504
+## Title: HBN Raid Assistant
+## Author: Niklas Gröber
+## Version: 0.1.0 Alpha
+## Notes: Intelligent Raid Buff Reminder
+## SavedVariables: HBNRaidAssistantDB
+
+Core.lua
+Config.lua
+Utils.lua
+Events.lua
+
+BuffDefinitions.lua
+Raid.lua
+Priority.lua
+
+Assignments.lua
+Communication.lua
+BuffScanner.lua
+Reminder.lua
+UI_Assignments.lua
+UI_Popup.lua
+UI.lua

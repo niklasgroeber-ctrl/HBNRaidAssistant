@@ -1,0 +1,1 @@
+-- Addon communication (coming in v0.2)
